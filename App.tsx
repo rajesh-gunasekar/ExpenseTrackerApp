@@ -8,6 +8,11 @@ import ExpensesScreen from './screens/ExpensesScreen';
 import StatisticsScreen from './screens/StatisticsScreen';
 import { Ionicons } from '@expo/vector-icons';
 import ProfileScreen from './screens/ProfileScreen';
+import AddExpenseScreen from './screens/AddExpenseScreen';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import store, { AppDispatch, RootState } from './redux/store';
+import { useEffect } from 'react';
+import { getUser } from './redux/thunks/userThunk';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -16,12 +21,31 @@ export default function App() {
     let user = true;
 
     return (
+        <Provider store={store}>
+            <Navigation />
+        </Provider>
+
+    );
+}
+
+const Navigation = () => {
+    const { user } = useSelector((state: RootState) => state.userReducer);
+    const dispatch: AppDispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getUser(null));
+    }, []);
+
+    console.log(user);
+
+
+    return (
         <NavigationContainer>
             {
                 user ? <MainScreens /> : <AuthScreens />
             }
         </NavigationContainer>
-    );
+    )
 }
 
 const AuthScreens = () => {
@@ -54,27 +78,12 @@ const MainScreens = () => {
             />
             <Tab.Screen
                 name="AddExpense"
-                component={ExpensesScreen}
+                component={AddExpenseScreen}
                 options={{
                     tabBarLabel: 'Add Expense',
                     tabBarIcon: ({ color, size, focused }) => (
                         <Ionicons
                             name="add-circle"
-                            size={size}
-                            color={focused ? "#274c77" : "#e7ecef"}
-                        />
-                    ),
-                    tabBarLabelStyle: { color: "#274c77" }
-                }}
-            />
-            <Tab.Screen
-                name="AddCategory"
-                component={ExpensesScreen}
-                options={{
-                    tabBarLabel: 'Add Category',
-                    tabBarIcon: ({ color, size, focused }) => (
-                        <Ionicons
-                            name="pricetag"
                             size={size}
                             color={focused ? "#274c77" : "#e7ecef"}
                         />
