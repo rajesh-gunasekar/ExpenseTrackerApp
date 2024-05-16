@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, ScrollView } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, ScrollView, ActivityIndicator } from 'react-native'
 import React, { useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons';
@@ -76,6 +76,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                                 value={email}
                                 onChangeText={setEmail}
                                 placeholder='Email'
+                                autoCapitalize='none'
                             />
                         </View>
 
@@ -93,11 +94,18 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
                                 onChangeText={setPassword}
                                 placeholder='Password'
                                 secureTextEntry={!showPassword}
+                                autoCapitalize='none'
                             />
                         </View>
 
                         <TouchableOpacity style={styles.btnContainer} onPress={handleLogin}>
-                            <Text style={styles.btn}>Login</Text>
+                            {
+                                loading ? (
+                                    <ActivityIndicator size="small" color="white" />
+                                ) : (
+                                    <Text style={styles.btn}>Login</Text>
+                                )
+                            }
                         </TouchableOpacity>
 
                         <Text>New to Wallet? <Text onPress={handleNavigation} style={styles.link}>Register</Text></Text>

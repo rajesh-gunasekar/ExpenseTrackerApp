@@ -18,8 +18,8 @@ const ExpenseGroup: React.FC<Props> = ({ header, expenses, navigation }) => {
     const dispatch: AppDispatch = useDispatch()
 
     const editHandler = (expense: Expense) => {
-        dispatch(setSelectedExpense(expense))
-        navigation.navigate('AddExpense');
+        dispatch(setSelectedExpense(expense));
+        navigation.navigate('Add Expense');
     }
 
     const deleteHandler = (expense: Expense) => {
@@ -44,7 +44,7 @@ const ExpenseGroup: React.FC<Props> = ({ header, expenses, navigation }) => {
                         <View style={styles.left}>
                             <Text style={styles.desc}>{item.desc}</Text>
                             <Text style={[styles.category, {
-                                color: getBackgroundColor(item.category),
+                                backgroundColor: getBackgroundColor(item.category),
                             }]}>{item.category}</Text>
                             <View style={styles.action}>
                                 <Text
@@ -85,24 +85,29 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        // columnGap: 10
     },
     left: {
-
+        width: "85%"
     },
     right: {
-
     },
     desc: {
         fontSize: 12,
-        marginBottom: 5,
+        marginBottom: 8,
         fontWeight: '500'
     },
     category: {
         fontSize: 10,
-        marginBottom: 5,
+        marginBottom: 8,
         color: "#fff",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        alignSelf: "flex-start",
+        paddingHorizontal: 5,
+        paddingVertical: 2,
+        borderRadius: 5,
+        overflow: "hidden"
     },
     action: {
         flexDirection: 'row'
@@ -120,7 +125,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: 'bold',
         textAlign: 'right',
-        marginBottom: 5
+        marginBottom: 8
     },
     time: {
         color: '#A9A9A9',

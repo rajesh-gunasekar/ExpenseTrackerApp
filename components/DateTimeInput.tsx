@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import moment from 'moment';
@@ -31,16 +31,19 @@ const DateTimeInput: React.FC<Props> = ({ date, handleDateChange }) => {
         <View style={styles.container}>
             <Text style={styles.header}>Date</Text>
 
-            <View style={styles.input_group}>
-                <TextInput
-                    value={moment(date).format('MMM DD, YYYY, hh:mm A')}
-                    placeholder='Select the Date'
-                    editable={false}
-                    style={styles.input}
-                />
+            <TouchableWithoutFeedback onPress={() => setShowPicker(!showPicker)}>
+                <View style={styles.input_group}>
+                    <Text style={styles.input}>{moment(date).format('MMM DD, YYYY, hh:mm A')}</Text>
 
-                <Ionicons onPress={() => setShowPicker(!showPicker)} name="chevron-down-outline" size={16} color="#A9A9A9" />
-            </View>
+                    {
+                        showPicker ? (
+                            <Ionicons name="chevron-up-outline" size={16} color="#A9A9A9" />
+                        ) : (
+                            <Ionicons name="chevron-down-outline" size={16} color="#A9A9A9" />
+                        )
+                    }
+                </View>
+            </TouchableWithoutFeedback>
 
             {
                 showPicker && (
@@ -72,10 +75,11 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderColor: "#ccc",
         borderWidth: 1,
-        flexDirection: "row"
+        flexDirection: "row",
+        alignItems: "center"
     },
     input: {
-        flex: 1
+        flex: 1,
     }
 })
 

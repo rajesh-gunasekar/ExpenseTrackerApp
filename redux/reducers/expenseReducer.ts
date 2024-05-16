@@ -1,12 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Expense } from '../../models/Expense';
 import { deleteExpense, getExpenses, postExpense, putExpense } from '../thunks/expenseThunk';
-import { getSortedExpenses } from '../../utils/Helper';
+import { filterExpenses, getSortedExpenses } from '../../utils/Helper';
+import moment from 'moment';
 
 interface ExpenseState {
     expenses: Expense[];
     sortedExpenses: { [key: string]: Expense[] };
     selectedExpense: Expense | null;
+    selectedFilter: string;
+    date: string;
+    query: string;
     loading: boolean;
     error: string | null;
 }
@@ -15,6 +19,9 @@ const initialState: ExpenseState = {
     expenses: [],
     sortedExpenses: {},
     selectedExpense: null,
+    selectedFilter: "All",
+    date: moment().format(),
+    query: "",
     loading: false,
     error: null
 }
@@ -28,6 +35,18 @@ const expenseSlice = createSlice({
         },
         setSelectedExpense(state, action: PayloadAction<Expense | null>) {
             state.selectedExpense = action.payload;
+        },
+        setSelectedFilter(state, action: PayloadAction<string>) {
+            state.selectedFilter = action.payload;
+            updateSortedExpenses(state);
+        },
+        setDate(state, action: PayloadAction<string>) {
+            state.date = action.payload;
+            updateSortedExpenses(state);
+        },
+        setQuery(state, action: PayloadAction<string>) {
+            state.query = action.payload;
+            updateSortedExpenses(state);
         }
     },
     extraReducers(builder) {
@@ -38,7 +57,7 @@ const expenseSlice = createSlice({
             .addCase(getExpenses.fulfilled, (state, action) => {
                 state.loading = false;
                 state.expenses = action.payload;
-                state.sortedExpenses = getSortedExpenses(action.payload);
+                updateSortedExpenses(state);
                 state.error = null;
             })
             .addCase(getExpenses.rejected, (state, action) => {
@@ -57,7 +76,7 @@ const expenseSlice = createSlice({
             .addCase(postExpense.fulfilled, (state, action) => {
                 state.loading = false;
                 state.expenses.push(action.payload);
-                state.sortedExpenses = getSortedExpenses(state.expenses);
+                updateSortedExpenses(state);
                 state.error = null;
             })
             .addCase(postExpense.rejected, (state, action) => {
@@ -79,7 +98,7 @@ const expenseSlice = createSlice({
                     }
                     return expense;
                 })
-                state.sortedExpenses = getSortedExpenses(state.expenses);
+                updateSortedExpenses(state);
                 state.error = null;
             })
             .addCase(putExpense.rejected, (state, action) => {
@@ -95,14 +114,8 @@ const expenseSlice = createSlice({
             })
             .addCase(deleteExpense.fulfilled, (state, action) => {
                 state.loading = false;
-                // console.log(action.payload);
-
                 state.expenses = state.expenses.filter(expense => expense.id !== action.payload);
-                // console.log(state.expenses);
-
-                state.sortedExpenses = getSortedExpenses(state.expenses);
-                // console.log(state.sortedExpenses);
-
+                updateSortedExpenses(state);
                 state.error = null;
             })
             .addCase(deleteExpense.rejected, (state, action) => {
@@ -116,8 +129,23 @@ const expenseSlice = createSlice({
     },
 })
 
+const updateSortedExpenses = (state: ExpenseState) => {
+    let queryExpenses = state.expenses;
+    if (state.query) {
+        let search = state.query.toLowerCase();
+        queryExpenses = state.expenses.filter(expense => {
+            return expense.desc.toLowerCase().includes(search) || expense.category.toLowerCase().includes(search);
+        })
+    }
+    let filteredExpenses = filterExpenses(queryExpenses, state.selectedFilter, state.date);
+    state.sortedExpenses = getSortedExpenses(filteredExpenses)
+}
+
 export const {
     setError,
-    setSelectedExpense
+    setSelectedExpense,
+    setSelectedFilter,
+    setDate,
+    setQuery
 } = expenseSlice.actions;
 export default expenseSlice.reducer;

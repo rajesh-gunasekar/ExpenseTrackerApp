@@ -17,17 +17,17 @@ const Category: React.FC<Props> = ({ category, setCategory }) => {
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         style={[styles.category, {
-                            borderColor: getBackgroundColor(item),
-                            backgroundColor: category === item ? getBackgroundColor(item) : 'transparent',
+                            borderColor: item.color,
+                            backgroundColor: category === item.category ? item.color : 'transparent',
                         }]}
-                        onPress={() => setCategory(item)}
+                        onPress={() => setCategory(item.category)}
                     >
                         <Text
-                            style={[styles.categoryText, { color: category === item ? '#fff' : '#adb5bd' }]}
-                        >{item}</Text>
+                            style={[styles.categoryText, { color: category === item.category ? '#fff' : '#adb5bd' }]}
+                        >{item.category}</Text>
                     </TouchableOpacity>
                 )}
-                keyExtractor={item => item}
+                keyExtractor={item => item.category}
                 showsHorizontalScrollIndicator={false}
             />
         </View>

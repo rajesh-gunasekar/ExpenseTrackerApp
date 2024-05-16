@@ -47,14 +47,14 @@ const styles = StyleSheet.create({
         borderStyle: "solid",
         borderColor: "#ccc",
         borderWidth: 1,
-        flexDirection: "row"
+        flexDirection: "row",
+        alignItems: "center"
     },
     symbol: {
         marginRight: 5,
         color: '#A9A9A9'
     },
     input: {
-
     }
 })
 

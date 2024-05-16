@@ -77,7 +77,7 @@ const MainScreens = () => {
                 }}
             />
             <Tab.Screen
-                name="AddExpense"
+                name="Add Expense"
                 component={AddExpenseScreen}
                 options={{
                     tabBarLabel: 'Add Expense',

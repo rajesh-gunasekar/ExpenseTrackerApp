@@ -1,4 +1,4 @@
-import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image } from 'react-native'
+import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View, Image, KeyboardAvoidingView, ScrollView, ActivityIndicator } from 'react-native'
 import React, { useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -66,63 +66,77 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image
-                source={require('../assets/auth_logo.jpg')}
-                style={styles.logo}
-            />
-
-            <View style={styles.content}>
-                <Text style={styles.header}>Join Us</Text>
-                <Text style={styles.title}>Register to Start</Text>
-
-                <View style={styles.input_group}>
-                    <Ionicons style={styles.icon} name="person" size={24} color="gray" />
-                    <TextInput
-                        style={styles.input}
-                        value={username}
-                        onChangeText={setUsername}
-                        placeholder='Username'
+            <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+                <ScrollView contentContainerStyle={styles.scrollView}>
+                    <Image
+                        source={require('../assets/auth_logo.jpg')}
+                        style={styles.logo}
                     />
-                </View>
 
-                <View style={styles.input_group}>
-                    <Ionicons
-                        style={styles.icon}
-                        name="mail"
-                        size={24}
-                        color="gray"
-                    />
-                    <TextInput
-                        style={styles.input}
-                        value={email}
-                        onChangeText={setEmail}
-                        placeholder='Email'
-                    />
-                </View>
+                    <View style={styles.content}>
+                        <Text style={styles.header}>Join Us</Text>
+                        <Text style={styles.title}>Register to Start</Text>
 
-                <View style={styles.input_group}>
-                    <Ionicons
-                        onPress={() => setShowPassword(!showPassword)}
-                        style={styles.icon}
-                        name={showPassword ? "eye" : "eye-off"}
-                        size={24}
-                        color="gray"
-                    />
-                    <TextInput
-                        style={styles.input}
-                        value={password}
-                        onChangeText={setPassword}
-                        placeholder='Password'
-                        secureTextEntry={!showPassword}
-                    />
-                </View>
+                        <View style={styles.input_group}>
+                            <Ionicons style={styles.icon} name="person" size={24} color="gray" />
+                            <TextInput
+                                style={styles.input}
+                                value={username}
+                                onChangeText={setUsername}
+                                placeholder='Username'
+                                autoCapitalize='none'
+                            />
+                        </View>
 
-                <TouchableOpacity style={styles.btnContainer} onPress={handleRegister}>
-                    <Text style={styles.btn}>Register</Text>
-                </TouchableOpacity>
+                        <View style={styles.input_group}>
+                            <Ionicons
+                                style={styles.icon}
+                                name="mail"
+                                size={24}
+                                color="gray"
+                            />
+                            <TextInput
+                                style={styles.input}
+                                value={email}
+                                onChangeText={setEmail}
+                                placeholder='Email'
+                                autoCapitalize='none'
+                            />
+                        </View>
 
-                <Text>Already a user? <Text onPress={handleNavigation} style={styles.link}>Login</Text></Text>
-            </View>
+                        <View style={styles.input_group}>
+                            <Ionicons
+                                onPress={() => setShowPassword(!showPassword)}
+                                style={styles.icon}
+                                name={showPassword ? "eye" : "eye-off"}
+                                size={24}
+                                color="gray"
+                            />
+                            <TextInput
+                                style={styles.input}
+                                value={password}
+                                onChangeText={setPassword}
+                                placeholder='Password'
+                                secureTextEntry={!showPassword}
+                                autoCapitalize='none'
+                            />
+                        </View>
+
+                        <TouchableOpacity style={styles.btnContainer} onPress={handleRegister}>
+                            {
+                                loading ? (
+                                    <ActivityIndicator size="small" color="white" />
+                                ) : (
+                                    <Text style={styles.btn}>Register</Text>
+                                )
+                            }
+                        </TouchableOpacity>
+
+                        <Text>Already a user? <Text onPress={handleNavigation} style={styles.link}>Login</Text></Text>
+                    </View>
+                </ScrollView>
+            </KeyboardAvoidingView>
+
         </SafeAreaView>
     )
 }
@@ -132,6 +146,9 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
         backgroundColor: '#fff'
+    },
+    scrollView: {
+        flexGrow: 1,
     },
     logo: {
         width: "100%",
