@@ -36,9 +36,6 @@ const Navigation = () => {
         dispatch(getUser(null));
     }, []);
 
-    console.log(user);
-
-
     return (
         <NavigationContainer>
             {

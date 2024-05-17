@@ -36,9 +36,6 @@ const ExpensesScreen = ({ navigation }: { navigation: any }) => {
         handleTextChange('');
     }
 
-    console.log(loading);
-
-
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
